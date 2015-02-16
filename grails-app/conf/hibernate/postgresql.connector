@@ -1,0 +1,8 @@
+<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+<property name="hibernate.connection.url">
+    jdbc:postgresql://ec2-54-83-201-96.compute-1.amazonaws.com:5432/db0brosmoifiic?username=ekprpwonnudjpr&amp;password=v43QSQLk8dmB-LJETM_2b99xdf&amp;ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
+</property>
+<property name="hibernate.connection.username">ekprpwonnudjpr</property>
+<property name="hibernate.connection.password">v43QSQLk8dmB-LJETM_2b99xdf</property>
+<property name="hibernate.connection.requireSSL">true</property>
