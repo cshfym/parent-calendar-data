@@ -10,16 +10,12 @@ class UrlMappings {
 		}
 		"/"(view:"/index")
 		*/
-        "/data"(controller:"data") {
-            action = [PUT:"save", DELETE:"delete", POST:"update"]
-        }
-        "/data/$id"(controller:"data") {
-            action = [GET:"show", PUT:"updateById", DELETE: "deleteById"]
-        }
-        "/data/all"(controller:"data", action:"findAll")
-        "/data/push"(controller:"data", action:"push")
-        "/data/cache"(controller:"data", action:"cache")
+    "/data"       (controller:"data") { action = [PUT:"save", DELETE:"delete", POST:"update"] }
+    "/data/$id"   (controller:"data") { action = [GET:"show", PUT:"updateById", DELETE: "deleteById"] }
+    "/data/all"   (controller:"data", action:"findAll")
+    "/data/push"  (controller:"data", action:"push")
+    "/data/cache" (controller:"data") { action = [PUT:"setCache", GET:"getCache"] }
 
-		"500"(view:'/error')
+		// "500"(view:'/error')
 	}
 }

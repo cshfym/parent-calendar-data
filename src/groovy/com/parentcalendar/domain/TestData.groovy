@@ -31,6 +31,9 @@ class TestData extends Persistable {
   @Column(name = "update_date", columnDefinition="DATETIME")
   Date updateDate
 
+  @Transient
+  final static int TTL = 30
+
   Long getId() { id }
   void setId(Long id) { this.id = id }
 
@@ -49,4 +52,5 @@ class TestData extends Persistable {
   Date getUpdateDate() { updateDate }
   void setUpdateDate(Date updateDate) { this.updateDate = updateDate }
 
+  int getTTL() { TTL }
 }

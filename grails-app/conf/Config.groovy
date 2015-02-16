@@ -74,23 +74,33 @@ environments {
 
 // log4j configuration
 log4j = {
-    // Example of changing the log pattern for the default console appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
 
-    error  'org.codehaus.groovy.grails.web.servlet',        // controllers
-           'org.codehaus.groovy.grails.web.pages',          // GSP
-           'org.codehaus.groovy.grails.web.sitemesh',       // layouts
-           'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-           'org.codehaus.groovy.grails.web.mapping',        // URL mapping
-           'org.codehaus.groovy.grails.commons',            // core / classloading
-           'org.codehaus.groovy.grails.plugins',            // plugins
-           'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
-           'org.springframework',
-           'org.hibernate',
-           'net.sf.ehcache.hibernate'
+  appenders {
+    rollingFile name:"errorLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/data-error.log", 'append':true, threshold:org.apache.log4j.Level.ERROR
+    rollingFile name:"warnLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/data-warn.log", 'append':true, threshold:org.apache.log4j.Level.WARN
+    rollingFile name:"debugLog", maxFileSize:"10MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/data-debug.log", 'append':true, threshold:org.apache.log4j.Level.INFO
+    console name:"stdout", threshold:org.apache.log4j.Level.WARN
+  }
+
+  root {
+    info "debugLog", "warnLog", "errorLog", "stdout"
+  }
+
+  /*
+  error  'org.codehaus.groovy.grails.web.servlet',        // controllers
+         'org.codehaus.groovy.grails.web.pages',          // GSP
+         'org.codehaus.groovy.grails.web.sitemesh',       // layouts
+         'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+         'org.codehaus.groovy.grails.web.mapping',        // URL mapping
+         'org.codehaus.groovy.grails.commons',            // core / classloading
+         'org.codehaus.groovy.grails.plugins',            // plugins
+         'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
+         'org.springframework',
+         'org.hibernate',
+         'net.sf.ehcache.hibernate'
+
+  warn 'org.apache.catalina'
+  */
 }
 
 // Uncomment and edit the following lines to start using Grails encoding & escaping improvements
