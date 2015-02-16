@@ -2,9 +2,11 @@ package com.parentcalendar.controller
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.parentcalendar.domain.GenericResponse
 import com.parentcalendar.domain.TestData
 import com.parentcalendar.exception.InvalidPayloadException
 import com.parentcalendar.services.mq.MQService
+import com.parentcalendar.services.redis.RedisService
 import com.parentcalendar.services.utility.StringCompressor
 import com.parentcalendar.services.db.GenericDataService
 import com.parentcalendar.services.mongo.MongoService
@@ -39,6 +41,9 @@ public class DataController {
 
     @Autowired
     MQService mqService
+
+    @Autowired
+    RedisService redisService
 
     @Autowired
     Gson gson
@@ -161,6 +166,10 @@ public class DataController {
       render gson.toJson(data)
     }
 
+    def cache() {
+        response.setStatus(200)
+        render gson.toJson(new GenericResponse(value: redisService.getCache()))
+    }
     def update() {
         //Employee e = new Employee(firstName: "Update", lastName: "Method")
         //render gson.toJson(e)

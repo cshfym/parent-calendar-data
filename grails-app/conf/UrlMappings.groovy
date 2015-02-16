@@ -18,7 +18,7 @@ class UrlMappings {
         }
         "/data/all"(controller:"data", action:"findAll")
         "/data/push"(controller:"data", action:"push")
-
+        "/data/cache"(controller:"data", action:"cache")
 
 		"500"(view:'/error')
 	}

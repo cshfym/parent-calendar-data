@@ -14,6 +14,7 @@ def tomcatJdbcVersion = "8.0.15"
 def postgreSqlVersion = "8.4-702.jdbc3"
 def mongoVersion = "2.12.4"
 def ironmqVersion = "0.0.10"
+def jedisVersion = "2.0.0"
 
 grails.project.dependency.resolver = "maven"
 
@@ -56,6 +57,7 @@ grails.project.dependency.resolution = {
         compile "org.apache.tomcat:tomcat-jdbc:${tomcatJdbcVersion}"
         compile "org.mongodb:mongo-java-driver:${mongoVersion}"
         compile "ironmq:ironmq:${ironmqVersion}"
+        compile "redis.clients:jedis:${jedisVersion}"
         runtime "postgresql:postgresql:${postgreSqlVersion}"
         runtime "mysql:mysql-connector-java:5.1.6"
 
