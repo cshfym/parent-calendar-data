@@ -13,20 +13,14 @@ import redis.clients.jedis.Protocol
 @Component
 class RedisService {
 
+  def grailsApplication
+
   private static final log = LogFactory.getLog(this)
 
   @Autowired
   private Gson gson
 
-  private final String REDIS_URL = "//localhost:6379"
-  //private final String REDIS_URL = "redis://104.236.129.239:6379"
-  private final String REDIS_PW = "bc09aeda-43de-4524-aed3-a7e072078785"
-
   private JedisPool pool
-
-  public RedisService() {
-    initializePool()
-  }
 
   public <T> void setCache(String key, T data, int ttl) {
 
@@ -68,16 +62,24 @@ class RedisService {
 
     if (!pool) {
       try {
-        URI redisUri = new URI(REDIS_URL)
+        URI redisUri = new URI(getRedisUrl())
         pool = new JedisPool(new JedisPoolConfig(),
           redisUri.getHost(),
           redisUri.getPort(),
           Protocol.DEFAULT_TIMEOUT,
-          REDIS_PW)
+          getRedisAuthentication())
       } catch (URISyntaxException ex) {
         log.error ex.getStackTrace(), ex
         throw ex
       }
     }
+  }
+
+  def getRedisUrl() {
+    grailsApplication.config.redis.url
+  }
+
+  def getRedisAuthentication() {
+    grailsApplication.config.redis.authentication
   }
 }

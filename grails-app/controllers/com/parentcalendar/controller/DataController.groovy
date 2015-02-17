@@ -13,6 +13,7 @@ import com.parentcalendar.services.mongo.MongoService
 import com.parentcalendar.services.security.ParentCalendarSecurityService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
+import parent.calendar.data.TestService
 
 /* Grails Controllers:
 HTTP Method	URI	Controller Action

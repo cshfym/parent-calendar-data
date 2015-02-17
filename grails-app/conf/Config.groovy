@@ -11,6 +11,11 @@
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
+// External configuration
+grails.config.locations = [
+    "file:/etc/grails/pc-config.groovy"
+]
+
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
@@ -73,12 +78,12 @@ environments {
 }
 
 // log4j configuration
+def appName = "${appName}"
 log4j = {
-
   appenders {
-    rollingFile name:"errorLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/data-error.log", 'append':true, threshold:org.apache.log4j.Level.ERROR
-    rollingFile name:"warnLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/data-warn.log", 'append':true, threshold:org.apache.log4j.Level.WARN
-    rollingFile name:"debugLog", maxFileSize:"10MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/data-debug.log", 'append':true, threshold:org.apache.log4j.Level.INFO
+    rollingFile name:"errorLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/${appName}-error.log", 'append':true, threshold:org.apache.log4j.Level.ERROR
+    rollingFile name:"warnLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/${appName}-warn.log", 'append':true, threshold:org.apache.log4j.Level.WARN
+    rollingFile name:"debugLog", maxFileSize:"10MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/${appName}-debug.log", 'append':true, threshold:org.apache.log4j.Level.INFO
     console name:"stdout", threshold:org.apache.log4j.Level.WARN
   }
 
