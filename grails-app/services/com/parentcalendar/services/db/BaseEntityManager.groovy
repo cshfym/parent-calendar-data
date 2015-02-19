@@ -22,8 +22,8 @@ class BaseEntityManager {
     }
   }
 
-  /* Find Entity */
-  public <T> T find(Class<T> type, Long id) {
+  /* Find Single Entity */
+  public <T extends Persistable> T find(Class<T> type, Long id) {
 
     Persistable obj = null
     Session session = factory.openSession()
@@ -39,7 +39,7 @@ class BaseEntityManager {
     obj
   }
 
-  /* Find Entities */
+  /* Find All Entities */
   public <T extends Persistable> List<T> findAll(String type) {
 
     List<T> result = []
@@ -66,14 +66,14 @@ class BaseEntityManager {
   }
 
   /* Create Entity */
-  public <T> T create(Persistable obj) {
+  public <T extends Persistable> T create(Persistable object) {
 
     Session session = factory.openSession()
     Transaction tx = null
 
     try {
       tx = session.beginTransaction()
-      session.save(obj)
+      session.save(object)
       tx.commit()
     } catch (HibernateException e) {
       if (tx != null) tx.rollback()
@@ -81,6 +81,43 @@ class BaseEntityManager {
     } finally {
       session.close()
     }
-    obj
+    object
+  }
+
+  /* Update Entity */
+  public <T extends Persistable> T update(Persistable object) {
+
+    Session session = factory.openSession()
+    Transaction tx = null
+
+    try {
+      tx = session.beginTransaction()
+      session.update(object)
+      tx.commit()
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback()
+      throw e
+    } finally {
+      session.close()
+    }
+    object
+  }
+
+  /* Delete Entity */
+  public void delete(Persistable obj) {
+
+    Session session = factory.openSession()
+    Transaction tx = null
+
+    try {
+      tx = session.beginTransaction()
+      session.delete(obj)
+      tx.commit()
+    } catch (HibernateException e) {
+      if (tx != null) tx.rollback()
+      throw e
+    } finally {
+      session.close()
+    }
   }
 }

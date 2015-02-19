@@ -1,4 +1,8 @@
 package com.parentcalendar.domain
 
 
-abstract class Persistable implements Serializable { }
+abstract class Persistable implements Serializable {
+
+  Long id
+
+}

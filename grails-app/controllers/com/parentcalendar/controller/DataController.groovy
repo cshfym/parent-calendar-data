@@ -1,19 +1,14 @@
 package com.parentcalendar.controller
 
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 import com.parentcalendar.domain.GenericResponse
 import com.parentcalendar.domain.TestData
 import com.parentcalendar.exception.InvalidPayloadException
 import com.parentcalendar.services.mq.MQService
 import com.parentcalendar.services.redis.RedisService
-import com.parentcalendar.services.utility.StringCompressor
 import com.parentcalendar.services.db.GenericDataService
-import com.parentcalendar.services.mongo.MongoService
-import com.parentcalendar.services.security.ParentCalendarSecurityService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
-import parent.calendar.data.TestService
 
 /* Grails Controllers:
 HTTP Method	URI	Controller Action
@@ -34,14 +29,9 @@ public class DataController {
 
   private static final log = LogFactory.getLog(this)
 
-  @Autowired
-  ParentCalendarSecurityService securityService
 
   @Autowired
   GenericDataService dataService
-
-  @Autowired
-  MongoService mongoService
 
   @Autowired
   MQService mqService
