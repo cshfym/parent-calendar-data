@@ -26,7 +26,7 @@ class BaseDataService extends BaseEntityManager {
     super.find(type, id)
   }
 
-  public <T extends Persistable> T findAll(Class<T> type) {
+  public <T extends Persistable> List<T> findAll(Class<T> type) {
 
     if (!validateType(type)) {
       throw new IllegalArgumentException("Parameter type must not be null.")

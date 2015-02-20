@@ -3,6 +3,7 @@ package com.parentcalendar.controller
 import com.google.gson.Gson
 import com.parentcalendar.domain.GenericResponse
 import com.parentcalendar.domain.TestData
+import com.parentcalendar.domain.User
 import com.parentcalendar.exception.InvalidPayloadException
 import com.parentcalendar.services.mq.MQService
 import com.parentcalendar.services.redis.RedisService
@@ -29,10 +30,6 @@ public class DataController {
 
   private static final log = LogFactory.getLog(this)
 
-
-  @Autowired
-  GenericDataService dataService
-
   @Autowired
   MQService mqService
 
@@ -45,80 +42,6 @@ public class DataController {
   def index() {
     response.setStatus(404)
     return
-  }
-
-  def push() {
-      /*
-    MQService mqService = new MQService("54a78bd2a65b22000900007b", "xwvYCsVgSmla3CCe7JIhXf4YNs0")
-    mqService.pushMessage("Test Message", "test-queue")
-    response.setStatus(200)
-    */
-  }
-
-/**
- * Fetches TestData.
- * @path: /data/$id
- * @param id
- * @return
- */
-  def show(String id) {
-
-    if (null == id) {
-      response.setStatus(404)
-      return
-    }
-
-    // Retrieve TestData object by ID.
-    TestData data = dataService.find(TestData.class, Long.valueOf(id))
-    if (null == data) {
-      response.setStatus(404)
-      return
-    }
-
-    // Convert compressed payload back to Base64-encoded string.
-    // String base64Payload = StringCompressor.decompress(data.payload)
-
-    response.setStatus(200)
-    render gson.toJson(data)
-  }
-
-  def findAll() {
-
-    List<TestData> list = dataService.findAll(TestData.canonicalName)
-    response.setStatus(200)
-    render gson.toJson(list)
-  }
-
-  def validateRequestPayload() {
-
-    Boolean validated = Boolean.TRUE
-    if(!request.JSON?.userId) { validated = Boolean.FALSE }
-    //if(!request.JSON?.payload) { validated = Boolean.FALSE }
-    validated
-  }
-
-  def save() {
-
-   /*
-   def file = grailsAttributes.getApplicationContext().getResource("gpxdata/OgdenMarathon.base64").getFile()
-   println "Size before compressed: ${file.getText('UTF-8').length()}"
-   byte[] compressed = StringCompressor.compress(file.getText('UTF-8'))
-   println "Size after compressed: ${compressed.length}"
-   data.setPayload(compressed)*
-   */
-
-    TestData data = new TestData(userId: request.JSON.userId, )
-
-    try {
-      data = dataService.persistTestData(data)
-    } catch (Exception ex) {
-      response.setStatus(500)
-      render gson.toJson(new InvalidPayloadException("Could not persist GPS data: " + ex.getCause()))
-      return
-    }
-
-    response.setStatus(201)
-    render gson.toJson(data)
   }
 
   def getCache() {
@@ -139,25 +62,12 @@ public class DataController {
   }
 
   def setCache() {
-    TestData data = new TestData(id: request.JSON.id)
+    User data = new User(id: request.JSON)
     log.info("Setting cache at cache/123: " + data.toString())
-    redisService.setCache("cache/123", data, TestData.TTL)
+    redisService.setCache("cache/123", data, User.TTL)
     response.setStatus(200)
 
     render gson.toJson(new GenericResponse(response: "Success"))
   }
 
-  def update() {
-    //Employee e = new Employee(firstName: "Update", lastName: "Method")
-    //render gson.toJson(e)
-  }
-
-  def delete() {
-    //Employee e = new Employee(firstName: "Delete", lastName: "Method")
-    //render gson.toJson(e)
-  }
-
-  def byId() {
-    response.setStatus(500)
-  }
 }

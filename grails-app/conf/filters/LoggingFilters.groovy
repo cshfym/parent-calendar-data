@@ -1,6 +1,7 @@
 package filters
 
 import java.util.concurrent.atomic.AtomicLong
+
 class LoggingFilters {
 
   private static final AtomicLong REQUEST_NUMBER_COUNTER = new AtomicLong()
@@ -13,7 +14,7 @@ class LoggingFilters {
 
       before = {
 
-        if (!log.debugEnabled) return true
+        //if (!log.debugEnabled) return true
 
         long start = System.currentTimeMillis()
         long currentRequestNumber = REQUEST_NUMBER_COUNTER.incrementAndGet()
@@ -32,7 +33,7 @@ class LoggingFilters {
 
       after = { Map model ->
 
-        if (!log.debugEnabled) return true
+        //if (!log.debugEnabled) return true
 
         long start = request[START_TIME_ATTRIBUTE]
         long end = System.currentTimeMillis()
@@ -50,7 +51,7 @@ class LoggingFilters {
 
       afterView = { Exception e ->
 
-        if (!log.debugEnabled) return true
+        //if (!log.debugEnabled) return true
 
         long start = request[START_TIME_ATTRIBUTE]
         long end = System.currentTimeMillis()

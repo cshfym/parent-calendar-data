@@ -1,8 +1,8 @@
 package com.parentcalendar.domain
 
-
 abstract class Persistable implements Serializable {
 
-  Long id
+  // Default TTL in seconds
+  private static final int TTL = 600
 
 }

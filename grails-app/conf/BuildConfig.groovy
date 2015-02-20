@@ -81,9 +81,9 @@ grails.project.dependency.resolution = {
         // compile ":database-session:1.2.1" // Sticky sessions.
         // compile ":webxml:1.4.1"
 
-        compile (":heroku:1.0.1") {
-            excludes "database-session"
-        }
+        //compile (":heroku:1.0.1") {
+        //    excludes "database-session"
+        //}
         // compile ':cache:1.0.0'
         compile ':cloud-support:1.0.11'
 
