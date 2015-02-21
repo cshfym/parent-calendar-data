@@ -13,7 +13,13 @@
 
 // External configuration
 grails.config.locations = [
-    "file:/etc/grails/pc-config.groovy"
+  "file:/etc/grails/pc-config.groovy"
+
+]
+
+// Hibernate domain classes
+domainClasses = [
+  com.parentcalendar.domain.User.class
 ]
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination

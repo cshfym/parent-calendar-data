@@ -10,24 +10,24 @@ class HibernateConfigurationService {
 
   def grailsApplication
 
-  private static final String DOMAIN_CLASS_CONFIG = "grails-app/conf/DomainClassConfig.groovy"
+  // private static final String DOMAIN_CLASS_CONFIG = "grails-app/conf/com.parentcalendar.services.db.DomainClassConfig.groovy"
 
   public Configuration getHibernateConfiguration() {
 
-      def config = new AnnotationConfiguration()
-              .setProperty("hibernate.dialect", grailsApplication.config.db.hibernate.dialect as String)
-              .setProperty("hibernate.connection.driver_class", grailsApplication.config.db.hibernate.driverClass as String)
-              .setProperty("hibernate.connection.url", grailsApplication.config.db.hibernate.url as String)
-              .setProperty("hibernate.connection.username", grailsApplication.config.db.hibernate.username as String)
-              .setProperty("hibernate.connection.password", grailsApplication.config.db.hibernate.password as String)
-              .setProperty("hibernate.connection.requireSSL", grailsApplication.config.db.hibernate.requireSSL as String)
+    def config = new AnnotationConfiguration()
+            .setProperty("hibernate.dialect", grailsApplication.config.db.hibernate.dialect as String)
+            .setProperty("hibernate.connection.driver_class", grailsApplication.config.db.hibernate.driverClass as String)
+            .setProperty("hibernate.connection.url", grailsApplication.config.db.hibernate.url as String)
+            .setProperty("hibernate.connection.username", grailsApplication.config.db.hibernate.username as String)
+            .setProperty("hibernate.connection.password", grailsApplication.config.db.hibernate.password as String)
+            .setProperty("hibernate.connection.requireSSL", grailsApplication.config.db.hibernate.requireSSL as String)
 
-      def domains = new ConfigSlurper().parse(new File(DOMAIN_CLASS_CONFIG).toURL())
+    // def domains = new ConfigSlurper().parse(new File(DOMAIN_CLASS_CONFIG).toURL())
 
-      domains.classes.each { domainClass ->
-          config.addAnnotatedClass(domainClass)
-      }
+    grailsApplication.config.domainClasses.each { domainClass ->
+        config.addAnnotatedClass(domainClass)
+    }
 
-      config
+    config
   }
 }
