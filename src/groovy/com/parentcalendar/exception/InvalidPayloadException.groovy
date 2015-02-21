@@ -2,13 +2,13 @@ package com.parentcalendar.exception
 
 class InvalidPayloadException {
 
-  String message
+  String error
 
   public InvalidPayloadException(String message) {
-    this.message = message
+    this.error = message
   }
 
-  def getMessage() {
-    message
+  def getError() {
+    error
   }
 }

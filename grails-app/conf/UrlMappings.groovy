@@ -16,7 +16,7 @@ class UrlMappings {
     "/data/push"  (controller:"data", action:"push")
     "/data/cache" (controller:"data") { action = [PUT:"setCache", GET:"getCache"] }
 
-    "/user"       (controller:"user") { action = [GET:"findAll", PUT:"create", POST:"update"] }
+    "/user"       (controller:"user") { action = [GET:"findAll", PUT:"update", POST:"create"] }
     "/user/$id"   (controller:"user") { action = [GET:"show", DELETE:"delete"] }
 
 		// "500"(view:'/error')

@@ -59,12 +59,20 @@ class UserController {
     render gson.toJson(data)
   }
 
-  // Path: /user [PUT]
-  def create(String payload) {
+  // Path: /user [POST]
+  def create() {
+
+    def payload = request.JSON
+
+    if (!payload) {
+      response.setStatus(500)
+      render gson.toJson(new InvalidPayloadException("Payload JSON cannot be null or empty."))
+      return
+    }
 
     User data
     try {
-      data = gson.fromJson(payload, User.class)
+      data = new User(payload)
     } catch (JsonSyntaxException ex) {
       response.setStatus(500)
       render gson.toJson(new InvalidPayloadException("Could not parse class from payload $payload: " + ex.getCause()))
@@ -89,7 +97,7 @@ class UserController {
   }
 
 
-  // Path: /user [POST]
+  // Path: /user [PUT]
   def update(String payload) {
 
     User data
