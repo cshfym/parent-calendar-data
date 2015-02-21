@@ -2,19 +2,17 @@ package com.parentcalendar.controller
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.parentcalendar.domain.GenericResponse
 import com.parentcalendar.domain.User
 import com.parentcalendar.exception.DataException
 import com.parentcalendar.exception.InvalidPayloadException
-import com.parentcalendar.services.db.UserDataService
+import com.parentcalendar.services.orm.UserDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 
 class UserController {
 
   private static final log = LogFactory.getLog(this)
-
-
-  // TODO: Externalize parent-calendar-data security token.
 
   @Autowired
   UserDataService service
@@ -30,9 +28,9 @@ class UserController {
     try {
       list = service.findAll(User.class)
     } catch (Exception ex) {
-      response.setStatus(500)
       def msg = "Could not execute findAll query: " + ex.getCause()
       log.error msg, ex
+      response.setStatus(500)
       render gson.toJson(new DataException(msg))
       return
     }
@@ -65,8 +63,10 @@ class UserController {
     def payload = request.JSON
 
     if (!payload) {
+      def msg = "Payload JSON cannot be null or empty."
+      log.error msg
       response.setStatus(500)
-      render gson.toJson(new InvalidPayloadException("Payload JSON cannot be null or empty."))
+      render gson.toJson(new InvalidPayloadException(msg))
       return
     }
 
@@ -74,8 +74,10 @@ class UserController {
     try {
       data = new User(payload)
     } catch (JsonSyntaxException ex) {
+      def msg = "Could not parse class from payload $payload: " + ex.getCause()
+      log.error msg, ex
       response.setStatus(500)
-      render gson.toJson(new InvalidPayloadException("Could not parse class from payload $payload: " + ex.getCause()))
+      render gson.toJson(new InvalidPayloadException(msg))
       return
     }
 
@@ -87,8 +89,10 @@ class UserController {
     try {
       data = service.create(data)
     } catch (Exception ex) {
+      def msg = "Could not persist object: $data" + ex.getCause()
+      log.error msg, ex
       response.setStatus(500)
-      render gson.toJson(new DataException("Could not persist object: $data" + ex.getCause()))
+      render gson.toJson(new DataException(msg))
       return
     }
 
@@ -98,22 +102,28 @@ class UserController {
 
 
   // Path: /user [PUT]
-  def update(String payload) {
+  def update() {
+
+    def payload = request.JSON
 
     User data
     try {
-      data = gson.fromJson(payload, User.class)
+      data = new User(payload)
     } catch (JsonSyntaxException ex) {
+      def msg = "Could not parse class from payload: $payload, " + ex.getCause()
+      log.error msg, ex
       response.setStatus(500)
-      render gson.toJson(new InvalidPayloadException("Could not parse class from payload: $payload, " + ex.getCause()))
+      render gson.toJson(new InvalidPayloadException(msg))
       return
     }
 
     try {
-      data = service.update(data)
-    } catch (Exception ex) {
+      data = service.update(data)    }
+    catch (Exception ex) {
+      def msg = "Could not update object: $data," + ex.getMessage()
+      log.error msg, ex
       response.setStatus(500)
-      render gson.toJson(new DataException("Could not update object: $data," + ex.getCause()))
+      render gson.toJson(new DataException(msg))
       return
     }
 
@@ -127,19 +137,24 @@ class UserController {
     User data = service.find(User.class, id)
 
     if (!data) {
+      def msg = "Entity not found with ID of $id"
+      log.error msg
       response.setStatus(200)
+      render gson.toJson(new GenericResponse(msg))
       return
     }
 
     try {
       service.delete(data)
     } catch (Exception ex) {
+      def msg = "Could not delete object: $data," + ex.getCause()
+      log.error msg, ex
       response.setStatus(500)
-      render gson.toJson(new DataException("Could not delete object: $data," + ex.getCause()))
+      render gson.toJson(new DataException(msg))
       return
     }
 
     response.setStatus(200)
-    return
+    render gson.toJson(new GenericResponse("Deleted $data"))
   }
 }

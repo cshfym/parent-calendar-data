@@ -1,7 +1,6 @@
 package com.parentcalendar.services.mongo
 
 import com.mongodb.*
-import com.parentcalendar.domain.TestData
 import grails.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -21,7 +20,7 @@ class MongoService {
         connection = client.getDB(uri.getDatabase())
     }
 
-    public void saveData(TestData payload) {
+    public void saveData(Object payload) {
 
         /*
           Estimated data size:

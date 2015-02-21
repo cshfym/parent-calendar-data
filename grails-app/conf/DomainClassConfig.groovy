@@ -1,5 +1,3 @@
 classes = [
-  com.parentcalendar.domain.User.class,
-  com.parentcalendar.domain.Test.class
-
+  com.parentcalendar.domain.User.class
 ]

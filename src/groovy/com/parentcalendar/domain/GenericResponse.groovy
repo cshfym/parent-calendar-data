@@ -3,6 +3,9 @@ package com.parentcalendar.domain
 
 class GenericResponse {
 
-    String response
+  String response
 
+  public GenericResponse(String response) {
+    this.response = response
+  }
 }

@@ -2,17 +2,15 @@ package com.parentcalendar.services.db
 
 import com.parentcalendar.domain.Persistable
 import grails.transaction.Transactional
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 
 /**
  * Data services available to all domain-specific services.
  * Performs argument-level validation.
  */
-@Service
+@Component
 @Transactional
 class BaseDataService extends BaseEntityManager {
-
-  static final EMPTY_STRING = ""
 
   public <T extends Persistable> T findById(Class<T> type, Long id) {
 
