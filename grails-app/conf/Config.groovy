@@ -14,7 +14,6 @@
 // External configuration
 grails.config.locations = [
   "file:/etc/grails/pc-config.groovy"
-
 ]
 
 // Hibernate domain classes
