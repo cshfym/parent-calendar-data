@@ -10,8 +10,6 @@ class HibernateConfigurationService {
 
   def grailsApplication
 
-  // private static final String DOMAIN_CLASS_CONFIG = "grails-app/conf/com.parentcalendar.services.db.DomainClassConfig.groovy"
-
   public Configuration getHibernateConfiguration() {
 
     def config = new AnnotationConfiguration()
@@ -21,8 +19,6 @@ class HibernateConfigurationService {
             .setProperty("hibernate.connection.username", grailsApplication.config.db.hibernate.username as String)
             .setProperty("hibernate.connection.password", grailsApplication.config.db.hibernate.password as String)
             .setProperty("hibernate.connection.requireSSL", grailsApplication.config.db.hibernate.requireSSL as String)
-
-    // def domains = new ConfigSlurper().parse(new File(DOMAIN_CLASS_CONFIG).toURL())
 
     grailsApplication.config.domainClasses.each { domainClass ->
         config.addAnnotatedClass(domainClass)
