@@ -18,7 +18,8 @@ grails.config.locations = [
 
 // Hibernate domain classes
 domainClasses = [
-  com.parentcalendar.domain.User.class
+  "com.parentcalendar.domain.User",
+  "com.parentcalendar.domain.Calendar"
 ]
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination

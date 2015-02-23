@@ -2,6 +2,7 @@ package com.parentcalendar.services.db
 
 import com.parentcalendar.domain.Persistable
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.validation.Validateable
 import org.springframework.stereotype.Component
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component
  * Performs argument-level validation.
  */
 @Component
+@Validateable
 @Transactional
 class BaseDataService extends BaseEntityManager {
 
@@ -30,7 +32,7 @@ class BaseDataService extends BaseEntityManager {
       throw new IllegalArgumentException("Parameter type must not be null.")
     }
 
-    super.findAll(type.getName())
+    super.findAll(type.getSimpleName())
   }
 
   public <T extends Persistable> T create(Persistable object) {

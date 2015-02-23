@@ -13,17 +13,35 @@ class User extends Persistable {
 
   @Id
   @GeneratedValue
-  @Column(name = "id")
+  @Column (name = "id")
   Long id
 
-  @Column(name = "active")
-  Boolean active
+  @Column (name = "version")
+  Long version
 
-  @Column(name = "email")
+  @Column (name = "account_expired")
+  Boolean expired
+
+  @Column (name = "account_locked")
+  Boolean locked
+
+  @Column (name = "password_expired")
+  Boolean passwordExpired
+
+  @Column (name = "enabled")
+  Boolean enabled
+
+  @Column (name = "email")
   String email
+
+  @Column (name = "username")
+  String username
+
+  @Column (name = "password")
+  String password
 
   @Override
   public String toString() {
-    "User [ id: $id, active: $active, email: $email ]"
+    "User [ id: $id, enabled: $enabled, email: $email ]"
   }
 }

@@ -21,7 +21,7 @@ class HibernateConfigurationService {
             .setProperty("hibernate.connection.requireSSL", grailsApplication.config.db.hibernate.requireSSL as String)
 
     grailsApplication.config.domainClasses.each { domainClass ->
-        config.addAnnotatedClass(domainClass)
+        config.addAnnotatedClass(Class.forName(domainClass))
     }
 
     config

@@ -1,7 +1,7 @@
 package com.parentcalendar.exception
 
 
-class DataException {
+class DataException extends Throwable {
 
   String message
 
@@ -9,7 +9,8 @@ class DataException {
     this.message = message
   }
 
-  def getMessage() {
+  @Override
+  String getMessage() {
     message
   }
 }
