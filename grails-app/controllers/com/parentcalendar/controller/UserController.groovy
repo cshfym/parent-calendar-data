@@ -1,6 +1,7 @@
 package com.parentcalendar.controller
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
 import com.parentcalendar.domain.GenericResponse
 import com.parentcalendar.domain.User
@@ -10,33 +11,17 @@ import com.parentcalendar.services.orm.UserDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 
-class UserController {
+class UserController extends BaseController {
 
   private static final log = LogFactory.getLog(this)
 
   @Autowired
   UserDataService service
 
-  @Autowired
-  Gson gson
+    Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
 
-  // Path: /user [GET]
   def findAll() {
-
-    List<User> list = []
-
-    try {
-      list = service.findAll(User.class)
-    } catch (Exception ex) {
-      def msg = "Could not execute findAll query: " + ex.getCause()
-      log.error msg, ex
-      response.setStatus(500)
-      render gson.toJson(new DataException(msg))
-      return
-    }
-
-    response.setStatus(200)
-    render gson.toJson(list)
+      render gson.toJson(super.findAllByType(User.class, service))
   }
 
   // Path: /user/{id} [GET]

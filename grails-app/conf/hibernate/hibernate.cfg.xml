@@ -4,8 +4,6 @@
 <hibernate-configuration>
     <session-factory>
 
-
-
       <!-- Enable C3P0 database connection pool -->
       <property name="test">abc</property>
       <property name="c3p0.min_size">2</property>

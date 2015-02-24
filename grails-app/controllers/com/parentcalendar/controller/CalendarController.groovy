@@ -1,6 +1,7 @@
 package com.parentcalendar.controller
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
 import com.parentcalendar.domain.Calendar
 import com.parentcalendar.domain.GenericResponse
@@ -15,8 +16,8 @@ class CalendarController extends BaseController {
     @Autowired
     CalendarDataService service
 
-    @Autowired
-    Gson gson
+    // TODO: Spring injection, or move the format to somewhere common.
+    Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
 
     def findAll() {
         render gson.toJson(super.findAllByType(Calendar.class, service))

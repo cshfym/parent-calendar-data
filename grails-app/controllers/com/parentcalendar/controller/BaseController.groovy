@@ -1,6 +1,7 @@
 package com.parentcalendar.controller
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.parentcalendar.domain.GenericResponse
 import com.parentcalendar.domain.Persistable
 import com.parentcalendar.exception.DataException
@@ -14,8 +15,7 @@ class BaseController {
 
     private static final log = LogFactory.getLog(this)
 
-    @Autowired
-    Gson gson
+    Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
 
     public <T> Object findAllByType(T type, BaseDataService service) {
 

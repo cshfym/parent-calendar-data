@@ -33,6 +33,4 @@
 
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean" />
 
-  <bean id="gson" class="com.google.gson.Gson" />
-
 </beans>

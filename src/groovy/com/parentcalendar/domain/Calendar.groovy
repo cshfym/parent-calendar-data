@@ -37,6 +37,6 @@ class Calendar extends Persistable {
 
     @Override
     public String toString() {
-        "Calendar [ id: $id, user: $user, active: $active ]"
+        "Calendar [ id: $id, user: $user, active: $active, createDate: $createDate, updateDate: $updateDate ]"
     }
 }
