@@ -1,31 +1,33 @@
 package com.parentcalendar.domain
 
 import com.parentcalendar.domain.common.Persistable
+import com.parentcalendar.services.exclusion.EntityExclude
 
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.JoinColumn
-import javax.persistence.OneToMany
-import javax.persistence.OneToOne
+import javax.persistence.ManyToOne
 import javax.persistence.Table
 import javax.persistence.Temporal
 import javax.persistence.TemporalType
 
 @Entity
-@Table(name = "calendar")
-class Calendar extends Persistable {
+@Table(name = "calendar_event")
+class CalendarEvent extends Persistable {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
     Long id
 
-    @OneToOne (fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
-    User user
+    @EntityExclude // Exclude from JSON response
+    @JoinColumn (name = "calendar_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    Calendar calendar
 
     @Column (name = "active")
     boolean active
@@ -38,15 +40,8 @@ class Calendar extends Persistable {
     @Temporal(TemporalType.TIMESTAMP)
     Date updateDate
 
-    @Column (name = "description")
-    String description
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "calendar")
-    List<CalendarEvent> events
-
     @Override
     public String toString() {
-        "Calendar [ id: $id, user: $user, active: $active, createDate: $createDate, " +
-                "updateDate: $updateDate, description: $description, calendarEvents: $events?.size() ]"
+        "CalendarEvent [ id: $id, calendar: $calendar.id, active: $active, createDate: $createDate, updateDate: $updateDate ]"
     }
 }

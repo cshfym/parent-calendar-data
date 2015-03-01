@@ -1,26 +1,21 @@
 package com.parentcalendar.controller
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
-import com.parentcalendar.domain.Calendar
+import com.parentcalendar.domain.CalendarEvent
 import com.parentcalendar.domain.common.GenericResponse
 import com.parentcalendar.exception.DataException
 import com.parentcalendar.exception.InvalidPayloadException
-import com.parentcalendar.services.orm.CalendarDataService
+import com.parentcalendar.services.orm.CalendarEventDataService
 import org.springframework.beans.factory.annotation.Autowired
 
-class CalendarController extends BaseController {
+class CalendarEventController extends BaseController {
 
     @Autowired
-    CalendarDataService service
+    CalendarEventDataService service
 
-    def findAll() {
-        render gson.toJson(super.findAllByType(Calendar.class, service))
-    }
-
+    @Override
     def show(Long id) {
-        render gson.toJson(super.findOne(Calendar.class, id, service))
+        render gson.toJson(super.findOne(CalendarEvent.class, id, service))
     }
 
     def create() {
@@ -29,9 +24,9 @@ class CalendarController extends BaseController {
             return
         }
 
-        Calendar data
+        CalendarEvent data
         try {
-            data = new Calendar(request.JSON)
+            data = new CalendarEvent(request.JSON)
         } catch (JsonSyntaxException ex) {
             def msg = "Could not parse class from payload $request.JSON: " + ex.getCause()
             log.error msg, ex
@@ -52,9 +47,9 @@ class CalendarController extends BaseController {
             return
         }
 
-        Calendar data
+        CalendarEvent data
         try {
-            data = new Calendar(request?.JSON)
+            data = new CalendarEvent(request?.JSON)
         } catch (JsonSyntaxException ex) {
             def msg = "Could not parse class from payload: $payload, " + ex.getCause()
             log.error msg, ex
@@ -70,7 +65,7 @@ class CalendarController extends BaseController {
 
     def delete(Long id) {
 
-        Calendar data = service.find(Calendar.class, id)
+        CalendarEvent data = service.find(CalendarEvent.class, id)
 
         if (!data) {
             def msg = "Entity not found with ID of $id"

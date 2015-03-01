@@ -1,4 +1,4 @@
-package com.parentcalendar.domain
+package com.parentcalendar.domain.common
 
 
 class GenericResponse {

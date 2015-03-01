@@ -1,6 +1,6 @@
 package com.parentcalendar.services.db
 
-import com.parentcalendar.domain.Persistable
+import com.parentcalendar.domain.common.Persistable
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.validation.Validateable
 import org.springframework.stereotype.Component

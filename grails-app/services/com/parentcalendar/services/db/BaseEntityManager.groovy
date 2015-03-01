@@ -1,6 +1,6 @@
 package com.parentcalendar.services.db
 
-import com.parentcalendar.domain.Persistable
+import com.parentcalendar.domain.common.Persistable
 import org.hibernate.HibernateException
 import org.hibernate.Session
 import org.hibernate.SessionFactory

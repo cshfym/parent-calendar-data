@@ -1,5 +1,7 @@
 package com.parentcalendar.domain
 
+import com.parentcalendar.domain.common.Persistable
+
 import javax.persistence.Entity
 import javax.persistence.Column
 import javax.persistence.GeneratedValue

@@ -3,7 +3,7 @@ package com.parentcalendar.controller
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
-import com.parentcalendar.domain.GenericResponse
+import com.parentcalendar.domain.common.GenericResponse
 import com.parentcalendar.domain.User
 import com.parentcalendar.exception.DataException
 import com.parentcalendar.exception.InvalidPayloadException
@@ -24,7 +24,6 @@ class UserController extends BaseController {
       render gson.toJson(super.findAllByType(User.class, service))
   }
 
-  // Path: /user/{id} [GET]
   def show(Long id) {
 
     if (null == id) {
@@ -42,7 +41,6 @@ class UserController extends BaseController {
     render gson.toJson(data)
   }
 
-  // Path: /user [POST]
   def create() {
 
     def payload = request.JSON
@@ -85,8 +83,6 @@ class UserController extends BaseController {
     render gson.toJson(data)
   }
 
-
-  // Path: /user [PUT]
   def update() {
 
     def payload = request.JSON
@@ -116,7 +112,6 @@ class UserController extends BaseController {
     render gson.toJson(data)
   }
 
-  // Path: /user/{id} [DELETE]
   def delete(Long id) {
 
     User data = service.find(User.class, id)

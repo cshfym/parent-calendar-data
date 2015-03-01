@@ -2,20 +2,24 @@ package com.parentcalendar.controller
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.parentcalendar.domain.GenericResponse
-import com.parentcalendar.domain.Persistable
+import com.parentcalendar.domain.common.GenericResponse
+import com.parentcalendar.domain.common.Persistable
 import com.parentcalendar.exception.DataException
 import com.parentcalendar.exception.InvalidPayloadException
 import com.parentcalendar.services.db.BaseDataService
+import com.parentcalendar.services.exclusion.EntityExclusionStrategy
 import org.apache.commons.logging.LogFactory
-import org.springframework.beans.factory.annotation.Autowired
-
 
 class BaseController {
 
     private static final log = LogFactory.getLog(this)
 
-    Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
+    public static final Gson gson = new GsonBuilder()
+        .setExclusionStrategies(new EntityExclusionStrategy())
+        .setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz")
+        .serializeNulls()
+        .create()
+
 
     public <T> Object findAllByType(T type, BaseDataService service) {
 
@@ -45,7 +49,8 @@ class BaseController {
             obj = service.find(type, id)
         } catch (Exception ex) {
             response.setStatus(500)
-            return new DataException("Exception finding single entity with id [$id]: $ex.getMessage()", ex)
+
+            return new DataException("Exception finding single entity with id [$id]: " + ex.getMessage(), ex)
         }
 
         if (null == obj) {
