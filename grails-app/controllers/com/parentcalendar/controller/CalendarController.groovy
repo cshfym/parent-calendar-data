@@ -72,7 +72,7 @@ class CalendarController extends BaseController {
 
         if (!data) {
             def msg = "Entity not found with ID of $id"
-            log.error msg
+            log.info msg
             response.setStatus(200)
             render gson.toJson(new GenericResponse(msg))
             return

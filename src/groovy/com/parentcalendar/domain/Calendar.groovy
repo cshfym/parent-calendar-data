@@ -41,12 +41,15 @@ class Calendar extends Persistable {
     @Column (name = "description")
     String description
 
+    @Column (name = "_default")
+    Boolean _default
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "calendar")
     List<CalendarEvent> events
 
     @Override
     public String toString() {
         "Calendar [ id: $id, user: $user, active: $active, createDate: $createDate, " +
-                "updateDate: $updateDate, description: $description, calendarEvents: $events?.size() ]"
+                "updateDate: $updateDate, description: $description, calendarEvents: $events?.size(), default: $_default ]"
     }
 }
