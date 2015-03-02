@@ -1,7 +1,5 @@
 package com.parentcalendar.controller
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
 import com.parentcalendar.domain.Calendar
 import com.parentcalendar.domain.common.GenericResponse
