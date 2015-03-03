@@ -11,7 +11,7 @@ class SecurityFilters {
     all(controller: '*', action: '*') {
       before = {
         Boolean authenticated = Boolean.TRUE
-        if(!request.getHeader("Authorization") || !authToken.equals(request.getHeader("Authorization"))) {
+        if (!request.getHeader("Authorization") || !authToken.equals(request.getHeader("Authorization"))) {
           authenticated = Boolean.FALSE
           response.setStatus(401)
         }

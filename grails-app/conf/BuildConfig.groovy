@@ -50,15 +50,17 @@ grails.project.dependency.resolution = {
         //compile "javax.xml.ws:jaxws-api:2.1"
         //compile "com.sun.jersey:jersey-server:1.8"
         //compile "com.sun.jersey:jersey-json:1.8"
+        // compile "org.mongodb:mongo-java-driver:${mongoVersion}"
+        // compile "ironmq:ironmq:${ironmqVersion}"
+        // runtime "postgresql:postgresql:${postgreSqlVersion}"
 
         compile "org.springframework:spring-orm:${springVersion}"
         compile "org.hibernate:hibernate-entitymanager:${hibernateVersion}"
         compile "org.hibernate:hibernate-annotations:${hibernateVersion}"
         compile "org.apache.tomcat:tomcat-jdbc:${tomcatJdbcVersion}"
-        compile "org.mongodb:mongo-java-driver:${mongoVersion}"
-        compile "ironmq:ironmq:${ironmqVersion}"
+
         compile "redis.clients:jedis:${jedisVersion}"
-        runtime "postgresql:postgresql:${postgreSqlVersion}"
+
         runtime "mysql:mysql-connector-java:5.1.6"
 
         runtime 'javax.xml.bind:jaxb-api:2.2.12'

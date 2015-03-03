@@ -1,15 +1,14 @@
 package com.parentcalendar.exception
 
 
-class DataException {
+class TokenExpirationException {
 
   String message
 
-  public DataException(String message) {
+  public TokenExpirationException(String message) {
     this.message = message
   }
 
-  @Override
   String getMessage() {
     message
   }

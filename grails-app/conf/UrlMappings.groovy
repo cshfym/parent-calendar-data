@@ -10,5 +10,7 @@ class UrlMappings {
 
       "/calendar/event"       (controller:"calendarEvent") { action = [GET:"findAll", PUT:"update", POST:"create"] }
       "/calendar/event/$id"   (controller:"calendarEvent") { action = [GET:"show", DELETE:"delete"] }
+
+      "/user/token"       (controller:"userToken") { action = [PUT:"refresh", POST:"token"] }
 	}
 }

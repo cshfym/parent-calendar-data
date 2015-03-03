@@ -1,10 +1,12 @@
 package com.parentcalendar.services.db
 
 import com.parentcalendar.domain.common.Persistable
+import org.hibernate.Criteria
 import org.hibernate.HibernateException
 import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.hibernate.Transaction
+import org.hibernate.criterion.Restrictions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -43,6 +45,26 @@ class BaseEntityManager {
       throw e
     } finally {
       session.close()
+    }
+
+    obj
+  }
+
+  /* Find Single Entity By Attribute */
+  public <T extends Persistable> T findBy(Class<T> type, String property, Object value) {
+
+    Persistable obj = null
+    Session session = getSessionFactory().openSession()
+
+    Criteria criteria = session.createCriteria(type)
+              .add(Restrictions.eq(property, value));
+
+    try {
+        obj = criteria.uniqueResult()
+    } catch (HibernateException e) {
+        throw e
+    } finally {
+        session.close()
     }
 
     obj

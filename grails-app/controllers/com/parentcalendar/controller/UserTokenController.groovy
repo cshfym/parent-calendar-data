@@ -3,25 +3,85 @@ package com.parentcalendar.controller
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
-import com.parentcalendar.domain.common.GenericResponse
 import com.parentcalendar.domain.User
+import com.parentcalendar.domain.common.GenericResponse
+import com.parentcalendar.domain.security.UserToken
 import com.parentcalendar.exception.DataException
 import com.parentcalendar.exception.InvalidPayloadException
+import com.parentcalendar.exception.TokenExpirationException
 import com.parentcalendar.services.orm.UserDataService
+import com.parentcalendar.services.orm.UserTokenDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 
-class UserController extends BaseController {
+class UserTokenController extends BaseController {
 
   private static final log = LogFactory.getLog(this)
 
   @Autowired
-  UserDataService service
+  UserDataService userDataService
 
-  def findAll() {
-      render gson.toJson(super.findAllByType(User.class, service))
+  @Autowired
+  UserTokenDataService service
+
+  /**
+   * Returns the token for the given userId (creating if one doesn't exist).
+   */
+  def token() {
+
+    def payload = request.JSON
+
+    if (!request.JSON || !request.JSON?.userId) {
+      response.setStatus(500)
+      log.debug "Invalid payload."
+      return
+    }
+
+    User user = userDataService.find(User.class, payload.userId)
+
+    if (!user) {
+      response.setStatus(404)
+      log.debug "User not found attempting to call token(), id: $payload.userId"
+      return
+    }
+
+    // User established, check for token.
+    UserToken token
+    try {
+      token = service.findBy(UserToken.class, "user.id", Long.valueOf(payload.userId))
+    } catch (Exception ex) {
+      log.error ex.getMessage(), ex
+      response.setStatus(500)
+      return gson.toJson(new DataException("Exception during user token processing."))
+    }
+
+    // No token - generate a new token and return it.
+    if (!token) {
+      try {
+        token = service.createAndPersistToken(user)
+      } catch (Exception ex) {
+        log.error ex.getMessage(), ex
+        response.setStatus(500)
+        return gson.toJson(new DataException("Exception during token creation."))
+      }
+    } else {
+      // Expired token?
+      if (service.isExpired(token)) {
+        log.debug "User token expired, $user.username"
+        //service.deleteToken(token)
+        //token = service.createAndPersistToken(user)
+      }
+    }
+
+    response.setStatus(200)
+    render gson.toJson(token)
   }
 
+  def refresh() {
+
+  }
+
+     /*
   def show(Long id) {
 
     if (null == id) {
@@ -29,7 +89,7 @@ class UserController extends BaseController {
       return
     }
 
-    User data = service.find(User.class, id)
+    User data = service.find(UserToken.class, id)
     if (null == data) {
       response.setStatus(404)
       return
@@ -41,19 +101,12 @@ class UserController extends BaseController {
 
   def create() {
 
-    def payload = request.JSON
-
-    if (!payload) {
-      def msg = "Payload JSON cannot be null or empty."
-      log.error msg
-      response.setStatus(500)
-      render gson.toJson(new InvalidPayloadException(msg))
-      return
-    }
-
-    User data
+    UserToken data
     try {
-      data = new User(payload)
+      data = new UserToken(
+        issued: new Date(),
+
+      )
     } catch (JsonSyntaxException ex) {
       def msg = "Could not parse class from payload $payload: " + ex.getCause()
       log.error msg, ex
@@ -135,4 +188,5 @@ class UserController extends BaseController {
     response.setStatus(200)
     render gson.toJson(new GenericResponse("Deleted $data"))
   }
+  */
 }

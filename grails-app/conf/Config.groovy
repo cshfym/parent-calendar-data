@@ -20,7 +20,8 @@ grails.config.locations = [
 domainClasses = [
   "com.parentcalendar.domain.User",
   "com.parentcalendar.domain.Calendar",
-  "com.parentcalendar.domain.CalendarEvent"
+  "com.parentcalendar.domain.CalendarEvent",
+  "com.parentcalendar.domain.security.UserToken"
 ]
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination

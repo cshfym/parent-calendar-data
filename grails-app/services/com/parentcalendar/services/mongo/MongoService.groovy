@@ -1,54 +1,53 @@
 package com.parentcalendar.services.mongo
 
-import com.mongodb.*
-import grails.transaction.Transactional
-import org.springframework.stereotype.Service
+//import com.mongodb.*
+//import grails.transaction.Transactional
+//import org.springframework.stereotype.Service
 
-@Service
-@Transactional
+//@Service
+//@Transactional
 class MongoService {
 
-    private static String MONGOLAB_URI = (System.getenv("MONGOLAB_URL")) ?:
-        "mongodb://heroku_app32454887:quhav5sp9l34c8rb867ccvf996@ds047040.mongolab.com:47040/heroku_app32454887"
-
-    MongoClient client
-    DB connection
-
-    public MongoService() throws UnknownHostException {
-        MongoClientURI uri  = new MongoClientURI(MONGOLAB_URI)
-        client = new MongoClient(uri)
-        connection = client.getDB(uri.getDatabase())
-    }
-
-    public void saveData(Object payload) {
-
-        /*
-          Estimated data size:
-          Marathon GPX data = ~2M.
-          4-Mile GPX data = ~125-150K.
-
-         */
-
-        final BasicDBObject insertGPSObject = createDBObjectFromPayload(payload)
-        DBCollection gpsData = connection.getCollection("gpsdata")
-        gpsData.insert(insertGPSObject)
-    }
-
     /*
-    public List<GPSPayloadWrapper> getGPSPayloadWrapperDataByUserId(String userId) {
+private static String MONGOLAB_URI = (System.getenv("MONGOLAB_URL")) ?:
+    "mongodb://heroku_app32454887:quhav5sp9l34c8rb867ccvf996@ds047040.mongolab.com:47040/heroku_app32454887"
 
-        List<GPSPayloadWrapper> list = []
+MongoClient client
+DB connection
 
-        DBCollection gpsData = connection.getCollection("gpsdata")
-        BasicDBObject findQuery = new BasicDBObject("userId", new BasicDBObject("\$eq", userId)) //gte, eq, lte
-        BasicDBObject orderBy = new BasicDBObject("createDate", 1)
-        DBCursor docs = gpsData.find(findQuery).sort(orderBy)
-        while(docs.hasNext()){
-            list << createGPSPayloadWrapperFromDBObject(docs.next())
-        }
-        list
+public MongoService() throws UnknownHostException {
+    MongoClientURI uri  = new MongoClientURI(MONGOLAB_URI)
+    client = new MongoClient(uri)
+    connection = client.getDB(uri.getDatabase())
+}
+
+public void saveData(Object payload) {
+
+
+      Estimated data size:
+      Marathon GPX data = ~2M.
+      4-Mile GPX data = ~125-150K.
+
+    final BasicDBObject insertGPSObject = createDBObjectFromPayload(payload)
+    DBCollection gpsData = connection.getCollection("gpsdata")
+    gpsData.insert(insertGPSObject)
+}
+
+
+public List<GPSPayloadWrapper> getGPSPayloadWrapperDataByUserId(String userId) {
+
+    List<GPSPayloadWrapper> list = []
+
+    DBCollection gpsData = connection.getCollection("gpsdata")
+    BasicDBObject findQuery = new BasicDBObject("userId", new BasicDBObject("\$eq", userId)) //gte, eq, lte
+    BasicDBObject orderBy = new BasicDBObject("createDate", 1)
+    DBCursor docs = gpsData.find(findQuery).sort(orderBy)
+    while(docs.hasNext()){
+        list << createGPSPayloadWrapperFromDBObject(docs.next())
     }
-    */
+    list
+}
+*/
 
     /*
     private BasicDBObject createDBObjectFromPayload(TestData payload) {
