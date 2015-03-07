@@ -15,6 +15,8 @@ class SecurityFilters {
 
       before = {
 
+        def isGlobal = request.getHeader("X-Auth-Global-Data")
+
         // No auth header.
         if (!request.getHeader("Authorization")) {
           response.setStatus(401)
