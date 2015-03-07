@@ -1,28 +1,40 @@
 package filters
 
+import com.parentcalendar.domain.security.UserToken
+import com.parentcalendar.services.orm.UserTokenDataService
+import org.springframework.beans.factory.annotation.Autowired
+
 class SecurityFilters {
 
-  def grailsApplication
+  @Autowired
+  UserTokenDataService tokenService
 
   def filters = {
 
-    def authToken = grailsApplication.config.authentication.token
+   all(controller: '*', action: '*') {
 
-    all(controller: '*', action: '*') {
       before = {
-        Boolean authenticated = Boolean.TRUE
-        if (!request.getHeader("Authorization") || !authToken.equals(request.getHeader("Authorization"))) {
-          authenticated = Boolean.FALSE
+
+        // No auth header.
+        if (!request.getHeader("Authorization")) {
           response.setStatus(401)
+          return false
         }
-        return authenticated
-      }
-      after = { Map model ->
 
-      }
-      afterView = { Exception e ->
+        // User token - authorization header format ID|JSESSIONID|TOKEN
+        UserToken userToken = tokenService.getToken(request.getHeader("Authorization").toString())
 
+        if (!userToken) {
+          response.setStatus(401)
+          return false
+        }
+
+        return true
       }
+
+      after = { Map model ->  }
+
+      afterView = { Exception e -> }
     }
   }
 }

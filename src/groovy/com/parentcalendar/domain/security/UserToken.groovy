@@ -38,8 +38,11 @@ class UserToken extends Persistable {
     @Temporal(TemporalType.TIMESTAMP)
     Date issued
 
+    @Column (name = "session_id")
+    String sessionId
+
     @Override
     public String toString() {
-        "UserToken: [ id: $id, user: $user, token: $token, issued: $issued ]"
+        "UserToken: [ id: $id, user: $user, token: $token, issued: $issued, sessionId: $sessionId ]"
     }
 }
