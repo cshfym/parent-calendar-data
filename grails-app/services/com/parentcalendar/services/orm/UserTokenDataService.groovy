@@ -20,15 +20,14 @@ class UserTokenDataService extends BaseDataService {
   @Autowired
   UserDataService userDataService
 
-  public UserToken getToken(String token) {
+  public boolean validateToken(String token) {
 
-    def decoded = new String(token.decodeBase64())
-    def tokenSplit = decoded.split("\\|")
+    def tokenSplit = extractTokenComponents(token)
 
     // Validate parameters.
     if (tokenSplit && tokenSplit.size() != 3) {
       log.error "Incorrect auth token format."
-      return null
+      return false
     }
 
     def jSessionId = tokenSplit[1]
@@ -39,13 +38,13 @@ class UserTokenDataService extends BaseDataService {
       user = userDataService.find(User.class, Long.parseLong(tokenSplit[0]))
     } catch (NumberFormatException ex) {
       log.error "Incorrect auth token format - invalid user ID parameter."
-      return null
+      return false
     }
 
     // Validate shared application token parameter.
     if (tokenSplit[2] != grailsApplication.config.authentication.token.toString()) {
       log.error "Incorrect auth token - token mismatch."
-      return null
+      return false
     }
 
     // Retrieve prior token for user, if available.
@@ -53,45 +52,41 @@ class UserTokenDataService extends BaseDataService {
 
     // If no prior user token, or different session ID, create one.
     if (!userToken) {
-      return createAndPersistToken(user, jSessionId)
+      return false
     }
 
     // If prior token was expired, force a re-login.
-    if (isExpired(userToken) || (userToken.sessionId != jSessionId)) {
-      deleteToken(userToken)
-      return createAndPersistToken(user, jSessionId)
+    if (isExpired(userToken.issued) || (userToken.sessionId != jSessionId)) {
+      return false
     }
 
-    userToken
+    true
   }
 
-  /* TODO: This method could be more robust in generating a random token. */
-  public UserToken createAndPersistToken(User user, String jSessionId) {
-
-    def token = new UserToken(
-      user: user,
-      sessionId: jSessionId,
-      token: grailsApplication.config.authentication.token,
-      issued: new Date())
-
-    super.create(token)
-  }
-
-  public void deleteToken(UserToken token) {
-    super.delete(token)
-  }
-
-  public boolean isExpired(UserToken token) {
+  public boolean isExpired(def issued) {
 
     int expirationMinutes = Integer.valueOf(grailsApplication.config.authentication.expiration)
-
-    if (Calendar.getInstance().timeInMillis > (token.getIssued().time + (1000 * 60 * expirationMinutes))) {
+    if (Calendar.getInstance().timeInMillis > (issued.time + (1000 * 60 * expirationMinutes))) {
         return true
     }
-
     false
   }
 
+    /**
+     * Extract the user ID from the header value. Method assumes validation on the token components was previously completed.
+     * @param value
+     * @return
+     */
+  public Long extractUserIdFromHeader(String token) {
+      def tokenSplit = extractTokenComponents(token)
+      Long.parseLong(tokenSplit[0])
+  }
+
+  private String[] extractTokenComponents(def token) {
+
+      def decoded = new String(token.decodeBase64())
+      decoded.split("\\|")
+  }
   /*
   private String getTokenString(int len = 20) {
     RandomStringUtils.random(len, (("a".."z") + ("0".."9")).join().toCharArray())

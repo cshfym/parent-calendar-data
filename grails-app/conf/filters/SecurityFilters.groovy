@@ -1,6 +1,6 @@
 package filters
 
-import com.parentcalendar.domain.security.UserToken
+import com.parentcalendar.domain.enums.Constants
 import com.parentcalendar.services.orm.UserTokenDataService
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -15,23 +15,20 @@ class SecurityFilters {
 
       before = {
 
-        def isGlobal = request.getHeader("X-Auth-Global-Data")
-
         // No auth header.
         if (!request.getHeader("Authorization")) {
           response.setStatus(401)
+          // TODO Logging
           return false
         }
 
-        // User token - authorization header format ID|JSESSIONID|TOKEN
-        UserToken userToken = tokenService.getToken(request.getHeader("Authorization").toString())
-
-        if (!userToken) {
-          response.setStatus(401)
-          return false
+        if (!tokenService.validateToken(request.getHeader("Authorization").toString())) {
+            response.setStatus(401)
+            // TODO Logging
+            return false
         }
 
-        return true
+        true
       }
 
       after = { Map model ->  }

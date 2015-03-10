@@ -1,6 +1,8 @@
 package com.parentcalendar.services.db
 
+import com.parentcalendar.domain.User
 import com.parentcalendar.domain.common.Persistable
+import com.parentcalendar.domain.enums.RequestScope
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.validation.Validateable
 import org.springframework.stereotype.Component
@@ -26,22 +28,37 @@ class BaseDataService extends BaseEntityManager {
     super.find(type, id)
   }
 
-    public <T extends Persistable> T findBy(Class<T> type, String property, Object value) {
+    public <T extends Persistable> T findBy(Class<T> type, String property, Object value, RequestScope scope, User user) {
 
       if (!validateType(type)) {
         throw new IllegalArgumentException("Parameter type must not be null.")
       }
 
-      super.findBy(type, property, value)
+      def result
+      if (scope == RequestScope.SCOPE_GLOBAL) {
+        result = super.findBy(type.getSimpleName())
+      }
+      if (scope == RequestScope.SCOPE_USER) {
+        result = super.findByWithUser(type.getSimpleName(), user)
+      }
+
+      result
     }
 
-  public <T extends Persistable> List<T> findAll(Class<T> type) {
+  public <T extends Persistable> List<T> findAll(Class<T> type, RequestScope scope, Long userId) {
 
     if (!validateType(type)) {
       throw new IllegalArgumentException("Parameter type must not be null.")
     }
 
-    super.findAll(type.getSimpleName())
+    def result
+    if (scope == RequestScope.SCOPE_GLOBAL) {
+      result = super.findAll(type.getSimpleName())
+    }
+    if (scope == RequestScope.SCOPE_USER) {
+      result = super.findAllByUser(type, userId)
+    }
+    result
   }
 
   public <T extends Persistable> T create(Persistable object) {

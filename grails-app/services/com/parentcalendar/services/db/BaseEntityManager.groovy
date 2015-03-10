@@ -1,5 +1,6 @@
 package com.parentcalendar.services.db
 
+import com.parentcalendar.domain.User
 import com.parentcalendar.domain.common.Persistable
 import org.hibernate.Criteria
 import org.hibernate.HibernateException
@@ -38,10 +39,14 @@ class BaseEntityManager {
 
     Persistable obj = null
     Session session = getSessionFactory().openSession()
+    Transaction tx
 
     try {
+      tx = session.beginTransaction()
       obj = session.get(type, id)
+      tx.commit()
     } catch (HibernateException e) {
+      if (tx) { tx.rollback() }
       throw e
     } finally {
       session.close()
@@ -55,13 +60,17 @@ class BaseEntityManager {
 
     Persistable obj = null
     Session session = getSessionFactory().openSession()
+    Transaction tx
 
     Criteria criteria = session.createCriteria(type)
-              .add(Restrictions.eq(property, value));
+              .add(Restrictions.eq(property, value))
 
     try {
+        tx = session.beginTransaction()
         obj = criteria.uniqueResult()
+        tx.commit()
     } catch (HibernateException e) {
+        if (tx) { tx.rollback() }
         throw e
     } finally {
         session.close()
@@ -70,13 +79,39 @@ class BaseEntityManager {
     obj
   }
 
+    /* Find Single Entity By Attribute */
+    public <T extends Persistable> T findByWithUser(Class<T> type, String property, Object value, User user) {
+
+        Persistable obj = null
+        Session session = getSessionFactory().openSession()
+        Transaction tx
+
+        Criteria criteria = session.createCriteria(type)
+                .add(Restrictions.eq(property, value))
+                .add(Restrictions.eq("user.id", user.id))
+
+        try {
+            tx = session.beginTransaction()
+            obj = criteria.uniqueResult()
+            tx.commit()
+        } catch (HibernateException e) {
+            if (tx) { tx.rollback() }
+            throw e
+        } finally {
+            session.close()
+        }
+
+        obj
+
+    }
+
   /* Find All Entities */
   public <T extends Persistable> List<T> findAll(String type) {
 
     List<T> result = []
 
     Session session = getSessionFactory().openSession()
-    Transaction tx = null
+    Transaction tx
 
     try {
       tx = session.beginTransaction()
@@ -84,15 +119,45 @@ class BaseEntityManager {
       data.each {
         result << it
       }
-      tx.commit();
+      tx.commit()
+    } catch (HibernateException e) {
+      if (tx) {
+        tx.rollback()
+      }
+      throw e
+    } finally {
+      session.close()
+    }
+    result
+  }
+
+  /* Find All Entities by UserID */
+  public <T extends Persistable> List<T> findAllByUser(Class<T> type, Long userId) {
+
+    List<T> result = []
+
+    Session session = getSessionFactory().openSession()
+    Transaction tx = null
+
+    Criteria criteria = session.createCriteria(type)
+            .add(Restrictions.eq("user.id", userId))
+
+    try {
+      tx = session.beginTransaction()
+      List data = criteria.list()
+      data.each {
+         result << it
+      }
+      tx.commit()
     } catch (HibernateException e) {
       if (tx != null) {
         tx.rollback()
       }
       throw e
     } finally {
-      session.close();
+      session.close()
     }
+
     result
   }
 
