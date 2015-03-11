@@ -87,6 +87,37 @@ class BaseController {
         obj
     }
 
+    public <T> Object findBy(T type, BaseDataService service, String col, Object val) {
+
+        Object obj
+
+        if (!col) {
+            response.setStatus(404)
+            return new GenericResponse("Column name cannot be null.")
+        }
+
+        if (!val) {
+            response.setStatus(404)
+            return new GenericResponse("Column value cannot be null.")
+        }
+
+        try {
+            obj = service.findBy(type, col, val)
+        } catch (Exception ex) {
+            response.setStatus(500)
+
+            return new DataException("Exception finding single entity with column [$col] and value [$val]: " + ex.getMessage(), ex)
+        }
+
+        if (null == obj) {
+            response.setStatus(404)
+            return new GenericResponse("Not found.")
+        }
+
+        response.setStatus(200)
+        obj
+    }
+
     public Object create(Persistable p, BaseDataService service) {
 
         // Reset ID attribute if passed.

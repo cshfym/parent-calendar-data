@@ -1,7 +1,5 @@
 package com.parentcalendar.controller
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
 import com.parentcalendar.domain.common.GenericResponse
 import com.parentcalendar.domain.User
@@ -22,6 +20,9 @@ class UserController extends BaseController {
       render gson.toJson(super.findAllByType(User.class, service))
   }
 
+  def findBy(String column, Object value) {
+      render gson.toJson(super.findBy(User.class, service, column, value))
+  }
   def show(Long id) {
 
     if (null == id) {
