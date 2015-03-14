@@ -22,16 +22,15 @@ class SecurityFilters {
           return false
         }
 
-        // Check for generic no-auth method.
-        if (null != request.getHeader(Constants.X_AUTH_NO_AUTH.value)
-                && Boolean.parseBoolean(request.getHeader(Constants.X_AUTH_NO_AUTH.value as String))
-                && request.getHeader("Authorization") == grailsApplication.config.authentication.token as String) {
-            return true
+        def token = tokenService.validateToken(request.getHeader("Authorization").toString())
+        if (!token) {
+            response.setStatus(401)
+            // TODO Logging
+            return false
         }
 
-        // No-auth is not enabled; enforce user authorization token.
-        if (!tokenService.validateToken(request.getHeader("Authorization").toString())) {
-            response.setStatus(401)
+        if (tokenService.isExpired(token)) {
+            response.setStatus(403)
             // TODO Logging
             return false
         }

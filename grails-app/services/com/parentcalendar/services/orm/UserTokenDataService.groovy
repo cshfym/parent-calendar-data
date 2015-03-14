@@ -20,7 +20,7 @@ class UserTokenDataService extends BaseDataService {
   @Autowired
   UserDataService userDataService
 
-  public boolean validateToken(String token) {
+  public UserToken validateToken(String token) {
 
     def tokenSplit = extractTokenComponents(token)
 
@@ -55,18 +55,13 @@ class UserTokenDataService extends BaseDataService {
       return false
     }
 
-    // If prior token was expired, force a re-login.
-    if (isExpired(userToken.issued) || (userToken.sessionId != jSessionId)) {
-      return false
-    }
-
-    true
+    userToken
   }
 
-  public boolean isExpired(def issued) {
+  public boolean isExpired(def token) {
 
     int expirationMinutes = Integer.valueOf(grailsApplication.config.authentication.expiration)
-    if (Calendar.getInstance().timeInMillis > (issued.time + (1000 * 60 * expirationMinutes))) {
+    if (Calendar.getInstance().timeInMillis > (token.issued.time + (1000 * 60 * expirationMinutes))) {
         return true
     }
     false
