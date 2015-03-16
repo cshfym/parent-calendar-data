@@ -1,6 +1,5 @@
 package filters
 
-import com.parentcalendar.domain.enums.Constants
 import com.parentcalendar.services.orm.UserTokenDataService
 import org.springframework.beans.factory.annotation.Autowired
 

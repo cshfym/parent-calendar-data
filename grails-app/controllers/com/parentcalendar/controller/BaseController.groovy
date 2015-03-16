@@ -13,6 +13,7 @@ import com.parentcalendar.services.db.BaseDataService
 import com.parentcalendar.services.exclusion.EntityExclusionStrategy
 import com.parentcalendar.services.orm.UserTokenDataService
 import org.apache.commons.logging.LogFactory
+import org.h2.util.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
 
 class BaseController {
@@ -28,16 +29,18 @@ class BaseController {
         .serializeNulls()
         .create()
 
-    public Long userId
+    public Long requestUserId // User from which request originated
+
+    public Long userId // User-specific data ID
 
     public RequestScope requestScope
 
     def beforeInterceptor = {
 
-      userId = tokenDataService.extractUserIdFromHeader(request.getHeader("Authorization").toString())
+      requestUserId = tokenDataService.extractUserIdFromHeader(request.getHeader("Authorization").toString())
 
       // Get request scope
-      requestScope = isRequestForAllUsers() ? RequestScope.SCOPE_GLOBAL : RequestScope.SCOPE_USER
+      requestScope = getRequestScope()
 
       // TODO Validate userToken comes cleanly.
     }
@@ -48,9 +51,9 @@ class BaseController {
 
     public <T> Object findAllByType(T type, BaseDataService service) {
 
-        List<T> list = []
+        List<T> list
         try {
-            list = service.findAll(type, requestScope, userId)
+            list = service.findAll(type, requestScope, requestUserId, userId)
         } catch (Exception ex) {
             def msg = "Could not execute findAll query, type $type: " + ex.getCause()
             log.error msg, ex
@@ -167,10 +170,22 @@ class BaseController {
         true
     }
 
-    public boolean isRequestForAllUsers() {
-      if (null != request.getHeader(Constants.X_AUTH_ALL_USERS.value) && Boolean.parseBoolean(request.getHeader(Constants.X_AUTH_ALL_USERS.value))) {
-        return true
-      }
-      false
+    protected RequestScope getRequestScope() {
+
+        def scope = RequestScope.SCOPE_REQUESTOR
+
+        // TODO: Validate user-specific data ID
+        if (!StringUtils.isNullOrEmpty(request.getHeader(Constants.X_AUTH_USER_ID.value))) {
+            userId = Long.parseLong(request.getHeader(Constants.X_AUTH_USER_ID.value))
+            scope = RequestScope.SCOPE_USER
+        }
+
+        if (scope != RequestScope.SCOPE_USER
+                && !StringUtils.isNullOrEmpty(request.getHeader(Constants.X_AUTH_ALL_USERS.value))
+                && Boolean.parseBoolean(request.getHeader(Constants.X_AUTH_ALL_USERS.value))) {
+            scope = RequestScope.SCOPE_GLOBAL
+        }
+
+        scope
     }
 }

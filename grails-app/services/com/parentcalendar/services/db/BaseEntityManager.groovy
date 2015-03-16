@@ -34,50 +34,50 @@ class BaseEntityManager {
       factory
   }
 
-  /* Find Single Entity */
-  public <T extends Persistable> T find(Class<T> type, Long id) {
+    /* Find Single Entity */
+    public <T extends Persistable> T find(Class<T> type, Long id) {
 
-    Persistable obj = null
-    Session session = getSessionFactory().openSession()
-    Transaction tx
+        Persistable obj = null
+        Session session = getSessionFactory().openSession()
+        Transaction tx
 
-    try {
-      tx = session.beginTransaction()
-      obj = session.get(type, id)
-      tx.commit()
-    } catch (HibernateException e) {
-      if (tx) { tx.rollback() }
-      throw e
-    } finally {
-      session.close()
+        try {
+            tx = session.beginTransaction()
+            obj = session.get(type, id)
+            tx.commit()
+        } catch (HibernateException e) {
+            if (tx) { tx.rollback() }
+            throw e
+        } finally {
+            session.close()
+        }
+
+        obj
     }
 
-    obj
-  }
+    /* Find Single Entity By Attribute */
+    public <T extends Persistable> T findBy(Class<T> type, String property, Object value) {
 
-  /* Find Single Entity By Attribute */
-  public <T extends Persistable> T findBy(Class<T> type, String property, Object value) {
+        Persistable obj = null
+        Session session = getSessionFactory().openSession()
+        Transaction tx
 
-    Persistable obj = null
-    Session session = getSessionFactory().openSession()
-    Transaction tx
+        Criteria criteria = session.createCriteria(type)
+                .add(Restrictions.eq(property, value))
 
-    Criteria criteria = session.createCriteria(type)
-              .add(Restrictions.eq(property, value))
+        try {
+            tx = session.beginTransaction()
+            obj = criteria.uniqueResult()
+            tx.commit()
+        } catch (HibernateException e) {
+            if (tx) { tx.rollback() }
+            throw e
+        } finally {
+            session.close()
+        }
 
-    try {
-        tx = session.beginTransaction()
-        obj = criteria.uniqueResult()
-        tx.commit()
-    } catch (HibernateException e) {
-        if (tx) { tx.rollback() }
-        throw e
-    } finally {
-        session.close()
+        obj
     }
-
-    obj
-  }
 
     /* Find Single Entity By Attribute */
     public <T extends Persistable> T findByWithUser(Class<T> type, String property, Object value, User user) {
@@ -105,115 +105,115 @@ class BaseEntityManager {
 
     }
 
-  /* Find All Entities */
-  public <T extends Persistable> List<T> findAll(String type) {
+    /* Find All Entities */
+    public <T extends Persistable> List<T> findAll(String type) {
 
-    List<T> result = []
+        List<T> result = []
 
-    Session session = getSessionFactory().openSession()
-    Transaction tx
+        Session session = getSessionFactory().openSession()
+        Transaction tx
 
-    try {
-      tx = session.beginTransaction()
-      List data = session.createQuery("FROM " + type).list()
-      data.each {
-        result << it
-      }
-      tx.commit()
-    } catch (HibernateException e) {
-      if (tx) {
-        tx.rollback()
-      }
-      throw e
-    } finally {
-      session.close()
-    }
-    result
-  }
-
-  /* Find All Entities by UserID */
-  public <T extends Persistable> List<T> findAllByUser(Class<T> type, Long userId) {
-
-    List<T> result = []
-
-    Session session = getSessionFactory().openSession()
-    Transaction tx = null
-
-    Criteria criteria = session.createCriteria(type)
-            .add(Restrictions.eq("user.id", userId))
-
-    try {
-      tx = session.beginTransaction()
-      List data = criteria.list()
-      data.each {
-         result << it
-      }
-      tx.commit()
-    } catch (HibernateException e) {
-      if (tx != null) {
-        tx.rollback()
-      }
-      throw e
-    } finally {
-      session.close()
+        try {
+            tx = session.beginTransaction()
+            List data = session.createQuery("FROM " + type).list()
+            data.each {
+                result << it
+            }
+            tx.commit()
+        } catch (HibernateException e) {
+            if (tx) {
+                tx.rollback()
+            }
+            throw e
+        } finally {
+            session.close()
+        }
+        result
     }
 
-    result
-  }
+    /* Find All Entities by record UserID */
+    public <T extends Persistable> List<T> findAllByUserId(Class<T> type, Long userId) {
 
-  /* Create Entity */
-  public <T extends Persistable> T create(Persistable object) {
+        List<T> result = []
 
-    Session session = getSessionFactory().openSession()
-    Transaction tx = null
+        Session session = getSessionFactory().openSession()
+        Transaction tx = null
 
-    try {
-      tx = session.beginTransaction()
-      session.save(object)
-      tx.commit()
-    } catch (HibernateException e) {
-      if (tx != null) tx.rollback()
-      throw e
-    } finally {
-      session.close()
+        Criteria criteria = session.createCriteria(type)
+                .add(Restrictions.eq("user.id", userId))
+
+        try {
+            tx = session.beginTransaction()
+            List data = criteria.list()
+            data.each {
+                result << it
+            }
+            tx.commit()
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback()
+            }
+            throw e
+        } finally {
+            session.close()
+        }
+
+        result
     }
-    object
-  }
 
-  /* Update Entity */
-  public <T extends Persistable> T update(Persistable object) {
+    /* Create Entity */
+    public <T extends Persistable> T create(Persistable object) {
 
-    Session session = getSessionFactory().openSession()
-    Transaction tx = null
+        Session session = getSessionFactory().openSession()
+        Transaction tx = null
 
-    try {
-      tx = session.beginTransaction()
-      session.update(object)
-      tx.commit()
-    } catch (HibernateException e) {
-      if (tx != null) tx.rollback()
-      throw e
-    } finally {
-      session.close()
+        try {
+            tx = session.beginTransaction()
+            session.save(object)
+            tx.commit()
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback()
+            throw e
+        } finally {
+            session.close()
+        }
+        object
     }
-    object
-  }
 
-  /* Delete Entity */
-  public void delete(Persistable obj) {
+    /* Update Entity */
+    public <T extends Persistable> T update(Persistable object) {
 
-    Session session = getSessionFactory().openSession()
-    Transaction tx = null
+        Session session = getSessionFactory().openSession()
+        Transaction tx = null
 
-    try {
-      tx = session.beginTransaction()
-      session.delete(obj)
-      tx.commit()
-    } catch (HibernateException e) {
-      if (tx != null) tx.rollback()
-      throw e
-    } finally {
-      session.close()
+        try {
+            tx = session.beginTransaction()
+            session.update(object)
+            tx.commit()
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback()
+            throw e
+        } finally {
+            session.close()
+        }
+        object
     }
-  }
+
+    /* Delete Entity */
+    public void delete(Persistable obj) {
+
+        Session session = getSessionFactory().openSession()
+        Transaction tx = null
+
+        try {
+            tx = session.beginTransaction()
+            session.delete(obj)
+            tx.commit()
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback()
+            throw e
+        } finally {
+            session.close()
+        }
+    }
 }
