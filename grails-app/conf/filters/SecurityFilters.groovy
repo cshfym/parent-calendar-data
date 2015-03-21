@@ -1,45 +1,37 @@
 package filters
 
-import com.parentcalendar.services.orm.UserTokenDataService
+import com.parentcalendar.services.security.UserTokenDataService
 import org.springframework.beans.factory.annotation.Autowired
 
 class SecurityFilters {
 
-  @Autowired
-  UserTokenDataService tokenService
+    @Autowired
+    UserTokenDataService tokenService
 
-  def filters = {
+    def filters = {
 
-   all(controller: '*', action: '*') {
+        all(controller: '*', action: '*') {
 
-      before = {
+            before = {
 
-        // No auth header.
-        if (!request.getHeader("Authorization")) {
-          response.setStatus(401)
-          // TODO Logging
-          return false
+                // No auth header.
+                if (!request.getHeader("Authorization")) {
+                    response.setStatus(401)
+                    // TODO Logging
+                    return false
+                }
+
+                // No valid token.
+                if (!tokenService.validateToken(request.getHeader("Authorization").toString())) {
+                    response.setStatus(401)
+                    // TODO Logging
+                    return false
+                }
+            }
+
+            after = { Map model ->  }
+
+            afterView = { Exception e -> }
         }
-
-        def token = tokenService.validateToken(request.getHeader("Authorization").toString())
-        if (!token) {
-            response.setStatus(401)
-            // TODO Logging
-            return false
-        }
-
-        if (tokenService.isExpired(token)) {
-            response.setStatus(403)
-            // TODO Logging
-            return false
-        }
-
-        true
-      }
-
-      after = { Map model ->  }
-
-      afterView = { Exception e -> }
     }
-  }
 }

@@ -1,25 +1,12 @@
 package com.parentcalendar.controller
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonSyntaxException
-import com.parentcalendar.domain.User
-import com.parentcalendar.domain.common.GenericResponse
-import com.parentcalendar.domain.security.UserToken
-import com.parentcalendar.exception.DataException
-import com.parentcalendar.exception.InvalidPayloadException
-import com.parentcalendar.exception.TokenExpirationException
-import com.parentcalendar.services.orm.UserDataService
-import com.parentcalendar.services.orm.UserTokenDataService
+import com.parentcalendar.services.security.UserTokenDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 
 class UserTokenController extends BaseController {
 
   private static final log = LogFactory.getLog(this)
-
-  @Autowired
-  UserDataService userDataService
 
   @Autowired
   UserTokenDataService service
@@ -29,6 +16,7 @@ class UserTokenController extends BaseController {
    */
   def token() {
 
+      /*
     def payload = request.JSON
 
     if (!request.JSON || !request.JSON?.userId) {
@@ -75,6 +63,9 @@ class UserTokenController extends BaseController {
 
     response.setStatus(200)
     render gson.toJson(token)
+
+    */
+      null
   }
 
   def refresh() {

@@ -1,6 +1,5 @@
 package com.parentcalendar.services.db
 
-import com.parentcalendar.domain.User
 import com.parentcalendar.domain.common.Persistable
 import com.parentcalendar.domain.enums.RequestScope
 import grails.transaction.Transactional
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Component
  * Data services available to all domain-specific services.
  * Performs argument-level validation.
  */
+@Deprecated
 @Component
 @Validateable
 @Transactional

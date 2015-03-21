@@ -1,6 +1,5 @@
 package com.parentcalendar.services.db
 
-import com.parentcalendar.domain.User
 import com.parentcalendar.domain.common.Persistable
 import org.hibernate.Criteria
 import org.hibernate.HibernateException
@@ -11,6 +10,7 @@ import org.hibernate.criterion.Restrictions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
+@Deprecated
 @Component
 class BaseEntityManager {
 
@@ -79,7 +79,7 @@ class BaseEntityManager {
         obj
     }
 
-    /* Find Single Entity By Attribute */
+    /* Find Single Entity By Attribute
     public <T extends Persistable> T findByWithUser(Class<T> type, String property, Object value, User user) {
 
         Persistable obj = null
@@ -104,6 +104,7 @@ class BaseEntityManager {
         obj
 
     }
+         */
 
     /* Find All Entities */
     public <T extends Persistable> List<T> findAll(String type) {

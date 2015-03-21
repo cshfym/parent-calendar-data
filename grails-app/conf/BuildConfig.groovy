@@ -6,14 +6,9 @@ grails.project.target.level = 1.7
 grails.project.source.level = 1.7
 grails.project.war.file = "target/${appName}.war"
 
-def gpsUtilityVersion = "0.1"
-def jettyVersion = "9.3.0.M1"
-def hibernateVersion = "3.5.4-Final"
+def hibernateVersion = "3.6.10.3"
 def springVersion = "3.2.8.RELEASE"
 def tomcatJdbcVersion = "8.0.15"
-def postgreSqlVersion = "8.4-702.jdbc3"
-def mongoVersion = "2.12.4"
-def ironmqVersion = "0.0.10"
 def jedisVersion = "2.0.0"
 
 grails.project.dependency.resolver = "maven"
@@ -43,20 +38,9 @@ grails.project.dependency.resolution = {
 
     dependencies {
 
-        // Jetty
-        //compile "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
-        //compile "org.eclipse.jetty:jetty-webapp:${jettyVersion}"
-
-        //compile "javax.xml.ws:jaxws-api:2.1"
-        //compile "com.sun.jersey:jersey-server:1.8"
-        //compile "com.sun.jersey:jersey-json:1.8"
-        // compile "org.mongodb:mongo-java-driver:${mongoVersion}"
-        // compile "ironmq:ironmq:${ironmqVersion}"
-        // runtime "postgresql:postgresql:${postgreSqlVersion}"
-
         compile "org.springframework:spring-orm:${springVersion}"
-        compile "org.hibernate:hibernate-entitymanager:${hibernateVersion}"
-        compile "org.hibernate:hibernate-annotations:${hibernateVersion}"
+        //compile "org.hibernate:hibernate-entitymanager:${hibernateVersion}"
+        //compile "org.hibernate:hibernate-annotations:${hibernateVersion}"
         compile "org.apache.tomcat:tomcat-jdbc:${tomcatJdbcVersion}"
 
         compile "redis.clients:jedis:${jedisVersion}"
@@ -69,7 +53,8 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        // runtime ":hibernate:$grailsVersion"
+        compile ":hibernate:$hibernateVersion"
+
         runtime ":jquery:1.7.2"
         runtime ":resources:1.1.6"
 

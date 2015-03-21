@@ -13,16 +13,18 @@
 
 // External configuration
 grails.config.locations = [
-  "file:/etc/grails/pc-config.groovy"
+  "file:/etc/grails/pc-config.groovy",
+  "file:/etc/grails/datasource.groovy"
 ]
 
-// Hibernate domain classes
+/* Hibernate domain classes
 domainClasses = [
   "com.parentcalendar.domain.User",
   "com.parentcalendar.domain.Calendar",
   "com.parentcalendar.domain.CalendarEvent",
   "com.parentcalendar.domain.security.UserToken"
 ]
+*/
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format

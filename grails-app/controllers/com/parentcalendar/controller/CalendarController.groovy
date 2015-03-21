@@ -3,22 +3,29 @@ package com.parentcalendar.controller
 import com.google.gson.JsonSyntaxException
 import com.parentcalendar.domain.Calendar
 import com.parentcalendar.domain.common.GenericResponse
+import com.parentcalendar.domain.enums.RequestScope
 import com.parentcalendar.exception.DataException
 import com.parentcalendar.exception.InvalidPayloadException
-import com.parentcalendar.services.orm.CalendarDataService
-import org.springframework.beans.factory.annotation.Autowired
+import grails.converters.JSON
 
 class CalendarController extends BaseController {
 
-    @Autowired
-    CalendarDataService service
-
     def findAll() {
-        render gson.toJson(super.findAllByType(Calendar.class, service))
+
+        def calendars
+
+        if (requestScope == RequestScope.USER) {
+            calendars = Calendar.findAllByUser(requestUser)
+        } else {
+            calendars = Calendar.list()
+        }
+
+        response.setStatus(200)
+        render calendars as JSON
     }
 
     def show(Long id) {
-        render gson.toJson(super.findOne(Calendar.class, id, service))
+        render Calendar.find { id == id } as JSON
     }
 
     def create() {
@@ -41,7 +48,9 @@ class CalendarController extends BaseController {
         data.createDate = new Date()
         data.updateDate = null
 
-        render gson.toJson(super.create(data, service))
+        // render gson.toJson(super.create(data, service))
+        // render gson.toJson(data.save(flush: true), Calendar.class)
+        render data as JSON
     }
 
     def update() {
@@ -63,12 +72,15 @@ class CalendarController extends BaseController {
 
         data.updateDate = new Date()
 
-        render gson.toJson(super.update(data, service))
+        // render gson.toJson(super.update(data, service))
+        // render gson.toJson(data.save(flush: true), Calendar.class)
+        render data as JSON
     }
 
     def delete(Long id) {
 
-        Calendar data = service.find(Calendar.class, id)
+        // Calendar data = service.find(Calendar.class, id)
+        def data = Calendar.find { id == id }
 
         if (!data) {
             def msg = "Entity not found with ID of $id"
@@ -79,7 +91,8 @@ class CalendarController extends BaseController {
         }
 
         try {
-            service.delete(data)
+            // service.delete(data)
+            data.delete(flush: true)
         } catch (Exception ex) {
             def msg = "Could not delete object: $data," + ex.getCause()
             log.error msg, ex
