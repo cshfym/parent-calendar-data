@@ -13,16 +13,8 @@ class UserController extends BaseController {
     private static final log = LogFactory.getLog(this)
 
     def findAll() {
-        // render gson.toJson(super.findAllByType(User.class, service))
         render User.findAll() as JSON
     }
-
-    /*
-    def findBy(String column, Object value) {
-        // render gson.toJson(super.findBy(User.class, service, column, value))
-        render gson.toJson(User.findByEmail { ${column} == value })
-    }
-    */
 
     def show(Long id) {
 
@@ -31,7 +23,6 @@ class UserController extends BaseController {
             return
         }
 
-        // User data = service.find(User.class, id)
         User data = User.find { id == id }
 
         if (null == data) {
@@ -40,7 +31,6 @@ class UserController extends BaseController {
         }
 
         response.setStatus(200)
-        // render gson.toJson(data)
         render data as JSON
     }
 
@@ -73,7 +63,6 @@ class UserController extends BaseController {
         }
 
         try {
-            // data = service.create(data)
             data.save(flush: true)
         } catch (Exception ex) {
             def msg = "Could not persist object: $data" + ex.getCause()
@@ -84,7 +73,6 @@ class UserController extends BaseController {
         }
 
         response.setStatus(201)
-        // render gson.toJson(data)
         render data as JSON
     }
 
@@ -104,7 +92,6 @@ class UserController extends BaseController {
         }
 
         try {
-            // data = service.update(data)
             data.save(flush: true)
         }
         catch (Exception ex) {
@@ -116,13 +103,11 @@ class UserController extends BaseController {
         }
 
         response.setStatus(200)
-        // render gson.toJson(data)
         render data as JSON
     }
 
     def delete(Long id) {
 
-        // User data = service.find(User.class, id)
         def data = User.find { id == id }
 
         if (!data) {
@@ -134,7 +119,6 @@ class UserController extends BaseController {
         }
 
         try {
-           //  service.delete(data)
            data.delete(flush: true)
         } catch (Exception ex) {
             def msg = "Could not delete object: $data," + ex.getCause()

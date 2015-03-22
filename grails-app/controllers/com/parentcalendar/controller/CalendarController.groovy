@@ -48,8 +48,6 @@ class CalendarController extends BaseController {
         data.createDate = new Date()
         data.updateDate = null
 
-        // render gson.toJson(super.create(data, service))
-        // render gson.toJson(data.save(flush: true), Calendar.class)
         data.save(flush: true)
         render data as JSON
     }
@@ -73,15 +71,12 @@ class CalendarController extends BaseController {
 
         data.updateDate = new Date()
 
-        // render gson.toJson(super.update(data, service))
-        // render gson.toJson(data.save(flush: true), Calendar.class)
         data.save(flush: true)
         render data as JSON
     }
 
     def delete(Long id) {
 
-        // Calendar data = service.find(Calendar.class, id)
         def data = Calendar.find { id == id }
 
         if (!data) {

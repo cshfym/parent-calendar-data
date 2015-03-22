@@ -14,9 +14,10 @@ class Calendar {
 
     static hasMany = [ events: CalendarEvent ]
 
-    static constraints = [
-        description: null
-    ]
+    static constraints = {
+        description nullable: true
+        updateDate nullable: true
+    }
 
     /*
     @Override
