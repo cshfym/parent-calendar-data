@@ -50,6 +50,7 @@ class CalendarController extends BaseController {
 
         // render gson.toJson(super.create(data, service))
         // render gson.toJson(data.save(flush: true), Calendar.class)
+        data.save(flush: true)
         render data as JSON
     }
 
@@ -74,6 +75,7 @@ class CalendarController extends BaseController {
 
         // render gson.toJson(super.update(data, service))
         // render gson.toJson(data.save(flush: true), Calendar.class)
+        data.save(flush: true)
         render data as JSON
     }
 

@@ -14,6 +14,10 @@ class Calendar {
 
     static hasMany = [ events: CalendarEvent ]
 
+    static constraints = [
+        description: null
+    ]
+
     /*
     @Override
     public String toString() {
