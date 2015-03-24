@@ -48,7 +48,7 @@ class CalendarController extends BaseController {
         data.createDate = new Date()
         data.updateDate = null
 
-        data.save(flush: true)
+        data.save(flush: true) // TODO Exception handling.
         render data as JSON
     }
 

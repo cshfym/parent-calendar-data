@@ -53,6 +53,7 @@ class UserTokenDataService  {
 
         // Validate token has not expired.
         if (isExpired(existingToken.issued)) {
+            log.error "Token expiration session for user $user.username"
             return false
         }
 

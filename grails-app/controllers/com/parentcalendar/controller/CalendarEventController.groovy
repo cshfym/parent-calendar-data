@@ -11,8 +11,6 @@ class CalendarEventController extends BaseController {
 
     @Override
     def show(Long id) {
-        // render gson.toJson(super.findOne(CalendarEvent.class, id, service))
-        // render gson.toJson(CalendarEvent.find { id == id })
         render CalendarEvent.find { id == id } as JSON
     }
 
@@ -24,7 +22,8 @@ class CalendarEventController extends BaseController {
 
         CalendarEvent data
         try {
-            data = new CalendarEvent(request.JSON)
+            //data = new CalendarEvent(request.JSON)
+            data = gson.fromJson(request.JSON.toString(), CalendarEvent.class)
         } catch (JsonSyntaxException ex) {
             def msg = "Could not parse class from payload $request.JSON: " + ex.getCause()
             log.error msg, ex
@@ -36,7 +35,8 @@ class CalendarEventController extends BaseController {
         data.createDate = new Date()
         data.updateDate = null
 
-        // render gson.toJson(super.create(data, service))
+        data.save(flush: true) // TODO Exception handling.
+
         render data as JSON
     }
 
@@ -59,13 +59,11 @@ class CalendarEventController extends BaseController {
 
         data.updateDate = new Date()
 
-        // render gson.toJson(super.update(data, service))
         render data as JSON
     }
 
     def delete(Long id) {
 
-        // CalendarEvent data = service.find(CalendarEvent.class, id)
         def data = CalendarEvent.find { id == id }
 
         if (!data) {
@@ -77,7 +75,6 @@ class CalendarEventController extends BaseController {
         }
 
         try {
-            // service.delete(data)
             data.delete(flush: true)
         } catch (Exception ex) {
             def msg = "Could not delete object: $data," + ex.getCause()
