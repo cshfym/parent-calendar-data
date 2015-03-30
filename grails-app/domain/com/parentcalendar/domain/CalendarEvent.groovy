@@ -8,7 +8,6 @@ class CalendarEvent {
     Long version
     Calendar calendar
     User user
-    Date eventDate
     String description
     Date fromTime
     Date toTime

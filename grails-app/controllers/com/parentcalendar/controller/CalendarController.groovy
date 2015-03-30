@@ -21,7 +21,10 @@ class CalendarController extends BaseController {
         }
 
         response.setStatus(200)
-        render calendars as JSON
+
+        JSON.use('deep') {
+            render calendars as JSON
+        }
     }
 
     def show(Long id) {

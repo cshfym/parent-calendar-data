@@ -28,7 +28,8 @@ class Calendar {
     @Override
     public String toString() {
         "Calendar [ id: $id, active: $active, createDate: $createDate, " +
-                "updateDate: $updateDate, description: $description, calendarEvents: $events?.size(), default: $_default ]"
+                "updateDate: $updateDate, description: $description, " +
+                "color: $color, calendarEvents: $events?.size(), default: $_default ]"
     }
 }
 
